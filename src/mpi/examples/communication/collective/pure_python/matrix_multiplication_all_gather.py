@@ -1,3 +1,7 @@
+"""
+Perform matrix-vector multiplication
+
+"""
 from mpi4py import MPI
 
 
@@ -96,8 +100,8 @@ def main():
     rank = comm.Get_rank()
     size = comm.Get_size()
 
-    A = Matrix([[1, 2, 3], [4, 5, 6]])
-    x = Matrix([[10], [20], [30]])
+    A = Matrix([[1, 2], [4, 5]])
+    x = Matrix([[1, 2], [4, 5]])
     m, _ = A.dimensions
     _, n = x.dimensions
     y = Matrix([[0 for j in range(n)] for i in range(m)])
