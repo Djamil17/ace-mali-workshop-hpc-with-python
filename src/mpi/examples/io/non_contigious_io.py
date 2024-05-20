@@ -1,26 +1,47 @@
+"""
+Write data (rank number multiplied size times) from buffer to
+file in parallel.
+
+Date: 05/19/2024
+Author: Djamil Lakhdar-Hamina
+"""
+
 import numpy as np
 from mpi4py import MPI
 
-comm = MPI.COMM_WORLD
-rank = comm.Get_rank()
-size = comm.Get_size()
 
-# set file mode then open the file handler
-amode = MPI.MODE_CREATE | MPI.MODE_RDWR | MPI.MODE_APPEND
-fh = MPI.File.Open(comm, "./datafile.noncontig", amode)
+def main():
+    comm = MPI.COMM_WORLD
+    rank = comm.Get_rank()
+    size = comm.Get_size()
+    status = MPI.Status()
 
-item_count = 10
+    # set file mode then open the file handler
+    amode = MPI.MODE_CREATE | MPI.MODE_RDWR | MPI.MODE_APPEND
+    fh = MPI.File.Open(comm, "./.datafile.noncontig", amode)
 
-buffer = np.empty(item_count, dtype="i")
-buffer[:] = rank
+    item_count = 10
 
-# create and commit custom data structure
-filetype = MPI.INT.Create_vector(item_count, 1, size)
-filetype.Commit()
+    buffer = np.empty(item_count, dtype="i")
+    buffer[:] = rank
 
-displacement = MPI.INT.Get_size() * rank
-fh.Set_view(displacement, filetype=filetype)
-fh.Write_all(buffer)
+    # create and commit custom data structure
+    filetype = MPI.INT.Create_vector(item_count, 1, size)
+    filetype.Commit()
 
-filetype.Free()
-fh.Close()
+    displacement = MPI.INT.Get_size() * item_count * rank
+    offset = MPI.INT.Get_size() * item_count
+    fh.Set_view(displacement, filetype=filetype)
+    fh.Write_at_all(offset, buffer, status)
+
+    new_buffer = np.empty(item_count, dtype="i")
+    fh.Get_view()
+    fh.Read_at_all(offset, new_buffer)
+    print(new_buffer)
+
+    filetype.Free()
+    fh.Close()
+
+
+if __name__ == "__main__":
+    main()
