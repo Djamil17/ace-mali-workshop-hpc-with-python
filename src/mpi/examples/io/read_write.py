@@ -9,7 +9,7 @@ def main():
     status = MPI.Status()
 
     amode = MPI.MODE_CREATE | MPI.MODE_RDWR | MPI.MODE_APPEND
-    fh = MPI.File.Open(comm=comm, filename="./test.txt", amode=amode)
+    fh = MPI.File.Open(comm=comm, filename="./.read_write.txt", amode=amode)
     message = f"Hello world, from process {rank}!\n".encode()
     chunk_size = f"Hello world, from process {rank}!\n".__sizeof__()
     offset = chunk_size * rank
