@@ -135,7 +135,6 @@ def main():
     B = Matrix([[1, 2], [3, 4], [4, 5]])
     m, _ = A.dimensions
     _, n = B.dimensions
-    y = Matrix([[0 for _ in range(n)] for _ in range(m)])
 
     if rank == 0:
         try:
