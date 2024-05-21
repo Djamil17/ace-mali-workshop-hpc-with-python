@@ -148,10 +148,10 @@ def main():
         except MPI.Exception as e:
             print(f"{e}: the number of rows does not equal number of processors")
 
-    n = comm.bcast(n, root=0)
+    n, row_partition = comm.bcast((n, A[rank, :]), root=0)
     local_row = []
     for i in range(n):
-        local_row.append((A[rank, :] * B[:, i])[0, 0])
+        local_row.append((row_partition * B[:, i])[0, 0])
 
     y = comm.allgather(local_row)
 
