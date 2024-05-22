@@ -6,7 +6,7 @@ Author: Djamil Lakhdar-Hamina
 
 """
 
-from typing import Callable
+from typing import Callable, Type
 
 import numpy as np
 from mpi4py import MPI
@@ -65,8 +65,8 @@ def create_function_on_process(function_string: str) -> Callable:
 
 
 def riemann_sum_left(
-    f: Callable[[float, int], float], interval: tuple, n: int
-) -> float | int:
+    f: Callable[[float, int], float], interval: tuple, n: int, dtype: Type = float
+) -> np.ndarray:
     """
     Takes function f, an interval (a,b) defined as a tuple, and a partition number n
     and approximates the integral of f on [a,b]
@@ -86,18 +86,15 @@ def riemann_sum_left(
     delta_x = (b - a) / n
     x = np.arange(a, b, delta_x)
     integral = sum(f(x) * delta_x)
-    return integral
+    return np.array(integral, dtype=dtype)
 
 
 def main():
-    comm = MPI.COMM_WORLD
-    comm = MPI.COMM_WORLD
-
     root = 0
+    comm = MPI.COMM_WORLD
     rank = comm.Get_rank()
     size = comm.Get_size()
-    global_sum = 0
-
+    global_sum = np.empty(1, dtype=float)
     if rank == 0:
         # Define function on root process
         function_string = create_function_string_from_user_input()
@@ -139,6 +136,7 @@ isn't evenly split between processes"
     if rank != 0:
         f = create_function_on_process(function_string)
 
+    # use rank number to create a interval in tuple form
     partition_size = (b - a) / size
     partition_number = n // size
     local_interval = (
@@ -146,10 +144,13 @@ isn't evenly split between processes"
         a + (rank + 1) * partition_size,
     )
     local_sum = riemann_sum_left(f, local_interval, partition_number)
-    global_sum = comm.reduce(local_sum, op=MPI.SUM, root=root)
+    # we use a double to allow for greater precision otherwise overflow can happen
+    comm.Reduce(
+        [local_sum, MPI.DOUBLE], [global_sum, MPI.DOUBLE], op=MPI.SUM, root=root
+    )
 
     if rank == 0:
-        print("the global sum is:", global_sum)
+        print("the global sum is:", global_sum[0])
 
     return global_sum
 
