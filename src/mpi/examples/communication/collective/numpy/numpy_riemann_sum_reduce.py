@@ -155,4 +155,5 @@ isn't evenly split between processes"
     return global_sum
 
 
-main()
+if __name__ == "__main__":
+    main()
