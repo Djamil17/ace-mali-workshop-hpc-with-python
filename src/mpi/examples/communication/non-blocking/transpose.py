@@ -1,3 +1,7 @@
+"""
+
+"""
+
 import numpy as np
 from mpi4py import MPI
 from mpi4py.util import dtlib
@@ -125,6 +129,7 @@ processes and dimensions and size are not even numbers"
 
     if rank == 0:
         print(final_buf)
+        # TODO: finish unblocking the result end
 
     win.Free()
 
