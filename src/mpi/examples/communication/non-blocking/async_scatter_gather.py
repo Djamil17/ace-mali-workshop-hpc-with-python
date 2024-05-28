@@ -272,7 +272,7 @@ def main():
         n = int(input())
         chunk = n // (size)
         chunk_buffer = np.array([chunk], dtype="i")
-        print(f"number elements per process: {chunk}")
+        # print(f"number elements per process: {chunk}")
         try:
             if n % size != 0:
                 raise ValueError(
@@ -289,7 +289,7 @@ processors"
         sendbuf = np.array(
             [np.concatenate((part_x, part_y)) for (part_x, part_y) in zip(*partitions)]
         )
-        print(f"split it up and concatenated, sendbuf is : \n {sendbuf}\n")
+        # print(f"split it up and concatenated, sendbuf is : \n {sendbuf}\n")
 
     else:
         n = chunk_buffer = sendbuf = None
