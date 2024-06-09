@@ -54,7 +54,7 @@ file = "README.md"
 content-type = "text/markdown"
 
 [project.scripts]
-myflask = "vhpc.__main__:main"
+vhpc = "vhpc.__main__:main"
 
 [tool.isort]
 profile = "black"

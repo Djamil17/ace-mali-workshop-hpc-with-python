@@ -28,7 +28,6 @@ def definetype(field_names: list, field_dtypes: list, size: int) -> MPI.Datatype
         [1] * len(field_names), offsets, field_mpitypes
     )
     structtype = structtype.Create_resized(0, struct_size)
-    structtype.Commit()
     return structtype
 
 
@@ -41,6 +40,7 @@ def main():
     struct_field_types = [np.float64, np.float64]
     point_type = list(zip(struct_field_names, struct_field_types))
     custom_type = definetype(struct_field_names, struct_field_types, 2)
+    custom_type.Commit()
     buf = np.zeros(size, dtype=point_type)
 
     if rank != 0:

@@ -12,7 +12,6 @@ Author: Djamil Lakhdar-Hamina
 
 """
 
-import numpy as np
 from mpi4py import MPI
 
 
@@ -20,33 +19,22 @@ def main():
     comm = MPI.COMM_WORLD
     rank = comm.Get_rank()
     size = comm.Get_size()
-    status = MPI.Status()
-
+    statuses = [MPI.Status() for _ in range(size // 2 + 1)]
     assert size == 2
-    N = 10
     # non numpy-example
     if rank == 0:
         data = bytearray("Hello, world!".encode())
         request = comm.Isend(data, dest=1)
-        print(2 + 3)
-    else:
-        buf = bytearray(46)
+        print(f"rank {rank}: line 28 {request.Test(statuses[0])}")
+        print(f"rank {rank} :line 29 {2 + 3} ")
+    elif rank == 1:
+        buf = bytearray(20)
         request = comm.Irecv(buf, source=0)
-        print(6 + 4)
-        request.wait(status=status)
+        print(f"rank {rank}: line 33 {request.Test(statuses[0])}")
+        print(f"rank {rank} : line 34 {6 + 3} ")
+        request.Wait(status=statuses[0])
+        print(f"rank {rank}: line 36 {request.Test(statuses[0])}")
         print(f"{buf.decode()} From process {rank}")
-
-    # numpy-example
-    if rank == 0:
-        data = np.random.rand(N)
-        request = comm.Isend([data, MPI.FLOAT], dest=1)
-        print(2 + 3)
-    else:
-        buf = np.empty(N)
-        request = comm.Irecv([buf, MPI.FLOAT], source=0)
-        print(3 + 3)
-        request.wait(status=status)
-        print(f"f process {rank}: {buf}")
 
 
 if __name__ == "__main__":

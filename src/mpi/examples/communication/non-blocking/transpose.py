@@ -1,4 +1,41 @@
 """
+This program partitions a square matrix into smaller square submatrices,
+transposes each submatrix in parallel using MPI, and
+reassembles the transposed blocks into the final matrix.
+The main steps include dividing the matrix, scattering the
+submatrices to MPI processes, transposing locally, and gathering the transposed blocks.
+
+Functions:
+----------
+- block_partition(matrix: np.array, n: int) -> np.array:
+    Divides a square matrix into nxn submatrices.
+
+- unblock(block_matrix: np.array, n: int) -> np.array:
+    Reconstructs the original matrix from nxn submatrices.
+
+- transpose(matrix: np.array) -> np.array:
+    Transposes a given matrix.
+
+MPI Process:
+-------------
+- main():
+    Manages the MPI processes, including matrix input, partitioning,
+    scattering, transposing, and gathering results.
+
+Example Usage:
+--------------
+1. The user is prompted to enter the dimensions of the square matrix and the block size.
+2. The matrix is partitioned, and submatrices are scattered to MPI processes.
+3. Each process transposes its submatrix and the results are gathered and reassembled
+   by the root process.
+
+Note:
+-----
+- Ensure MPI is set up in your environment to run this program.
+
+Example:
+
+
 
 """
 
@@ -31,10 +68,11 @@ def block_partition(matrix: np.array, n: int) -> np.array:
     return np.array(blocks)
 
 
+# TODO : write this function
 def unblock(block_matrix: np.array, n: int) -> np.array:
     """
-    Takes a square matrix of dimensions mxm and breaks into
-    square submatrices of dimensions nxn.
+    Takes a block matrix of sub dimensions mxm and builds
+    square matrix of dimension nxn.
 
     Parameters:
     - matrix: 3d np.array matrix to be collapsed
@@ -86,9 +124,7 @@ def main():
     np_dtype = dtlib.to_numpy_dtype(dtype)
     itemsize = dtype.Get_size()
 
-    dim = None
-    blocks = None
-    local_block = None
+    dim = blocks = local_block = None
     if rank == 0:
         print("dimensions of the square matrix:")
         dim = int(input())

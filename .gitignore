@@ -211,3 +211,11 @@ requirements.txt
 licensing_id.txt
 .DS_Store
 figures/.DS_Store
+.vscode
+#io section
+
+.point_read_write.txt
+.collective_read_write.txt
+.collective_target_read_write.txt
+.read_write.txt
+.noncontig_read_write.txt
