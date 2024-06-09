@@ -35,12 +35,11 @@ def main() -> None:
     # write section
     if rank == 0:
         print("now writing...")
-    fh.Write_at(offset, message, status)
+    fh.Write_at_all(offset, message, status)
 
     # read section
     buffer = bytearray(chunk_size)
-    fh.Read_at(offset, buffer)
-
+    fh.Read_at_all(offset, buffer)
     # Gather all buffers
     all_buffer = comm.gather(buffer, root=0)
     # Print from root in order

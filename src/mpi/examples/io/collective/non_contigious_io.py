@@ -29,10 +29,11 @@ def main() -> None:
     buffer = np.empty(item_count, dtype="i")
     buffer[:] = rank
 
-    # create and commit custom data structure
+    # Create a non-contiguous MPI data type
     filetype = MPI.INT.Create_vector(item_count, 1, size)
     filetype.Commit()
 
+    # Set the displacement for the file view based on the rank
     displacement = MPI.INT.Get_size() * item_count * rank
     offset = MPI.INT.Get_size() * item_count
     fh.Set_view(displacement, filetype=filetype)
