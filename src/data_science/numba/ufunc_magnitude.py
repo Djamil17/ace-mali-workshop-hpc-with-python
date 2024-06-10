@@ -15,7 +15,7 @@ import numpy as np
 
 @nb.vectorize([nb.float32(nb.float32, nb.float32)])
 def magnitude(x: float, y: float) -> float:
-    return (x**2 + y**2) * (1 / 2)
+    return (x**2 + y**2) ** (1 / 2)
 
 
 def main() -> None:
