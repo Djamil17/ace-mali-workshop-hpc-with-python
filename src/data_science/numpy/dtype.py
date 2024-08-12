@@ -20,4 +20,4 @@ points = np.array(
     dtype=point_type,
 )
 
-print(points[1])(4.0, 5.0, 6.0, [7.0, 8.0, 9.0])
+print(points[1])

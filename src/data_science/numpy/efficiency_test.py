@@ -2,13 +2,12 @@ from timeit import timeit
 
 import numpy as np
 
-array = np.arange(1e5)
-list_array = array.tolist()
+_ = np.copy()
 
 val1 = timeit(
-    "[5*i for i in ]",
+    "[5*i for i in array_list]",
     setup="import numpy as np; array = np.arange(1e5); \
-              array_list=array.to_list()",
+              array_list=array.tolist()",
     number=1000,
 )
 val2 = timeit(

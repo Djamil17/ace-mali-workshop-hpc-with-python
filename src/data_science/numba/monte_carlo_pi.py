@@ -99,7 +99,7 @@ def fast_math_jitted_monte_carlo_pi(samples: nb.int32, area: nb.float32) -> nb.f
 
 @timeit
 @nb.jit(nb.float32(nb.int32, nb.float32), fastmath={"reassoc", "arcp"})
-def fast_math_flats_jitted_monte_carlo_pi(
+def fast_math_flags_jitted_monte_carlo_pi(
     samples: nb.int32, area: nb.float32
 ) -> nb.float32:
     hit = 0.0
@@ -131,7 +131,7 @@ def main() -> str:
         jitted_monte_carlo_pi,
         less_precision_jitted_monte_carlo_pi,
         fast_math_jitted_monte_carlo_pi,
-        fast_math_flats_jitted_monte_carlo_pi,
+        fast_math_flags_jitted_monte_carlo_pi,
         parallel_jitted_monte_carlo_pi,
     ]
 

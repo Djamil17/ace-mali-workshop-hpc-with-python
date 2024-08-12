@@ -9,6 +9,7 @@ x.reshape((3, 3, 3))
 
 x = np.linspace(0, 1, 9)
 
+# column vector
 x.reshape((9, 1))
-
+# row vector
 x.reshape((1, 9))

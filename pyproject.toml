@@ -19,8 +19,7 @@ classifiers = [
 dependencies = [
     "mpi4py",
     "scipy",
-    "typer",
-    "requests"
+    "typer"
 ]
 
 [project.license]

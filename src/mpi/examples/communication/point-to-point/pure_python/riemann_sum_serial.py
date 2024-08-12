@@ -1,11 +1,32 @@
 """
-Perform a left-sided riemann sum given user-inputed function, interval,
-and a partition number in serial fashion.
+This program dynamically creates a single-line function from user input,
+then calculates the approximate integral of this function over a specified
+interval using the left Riemann sum method.
 
-Date: 05/14/2024
-Author: Djamil Lakhdar-Hamina
-Last Modified : 05/15/2024
+The program consists of the following functions:
 
+1. is_single_line(expression: str) -> bool:
+    - Checks if a given string expression is a single line.
+
+2. create_function_from_user_input() -> Callable:
+    - Prompts the user to enter a single-line function body and dynamically creates
+    this function.
+
+3. riemann_sum_left(f: Callable[[float], float], interval: tuple, n: int) -> float:
+    - Approximates the integral of a function on a given interval using the left
+    Riemann sum.
+
+4. main():
+    - Main function to execute the program. It creates a user-defined function, takes
+    interval and partition number inputs, and calculates the integral using the left
+    Riemann sum method.
+
+Usage:
+- Run the program.
+- Enter a single-lined function body when prompted.
+- Enter the start and end of the interval and the number of partitions when prompted.
+- The program will output the approximate integral of the function over the specified
+ interval.
 """
 
 from typing import Callable
@@ -94,7 +115,7 @@ def main():
     assert a < b
 
     result = riemann_sum_left(f, (a, b), n)
-    print(f"The integral of {f} on [{a},{b}] ghiven n={n}:\n result: {result}\n")
+    print(f"The integral of {f} on [{a},{b}] given n={n}:\n result: {result}\n")
 
 
 if __name__ == "__main__":
